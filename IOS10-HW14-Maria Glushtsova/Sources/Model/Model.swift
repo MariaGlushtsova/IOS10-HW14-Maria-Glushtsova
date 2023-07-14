@@ -11,40 +11,39 @@ struct Model {
     let image: String
     let name: String
     let imageCount: String
-    let chevron: String?
 }
 
 extension Model {
     static let modelsArray = [
         [
-            Model(image: "Camera", name: "Недавние", imageCount: "", chevron: nil),
-            Model(image: "Favorite", name: "Избранные", imageCount: "", chevron: nil),
-            Model(image: "Instagram", name: "Instagram", imageCount: "", chevron: nil),
-            Model(image: "Pin", name: "Pinterest", imageCount: "", chevron: nil),
-            Model(image: "Telegram", name: "Telegram", imageCount: "", chevron: nil),
-            Model(image: "SriLanka", name: "Шри Ланка", imageCount: "", chevron: nil),
-            Model(image: "Canaria", name: "Канария", imageCount: "", chevron: nil),
-            Model(image: "Viber", name: "Viber", imageCount: "", chevron: nil)
+            Model(image: "Camera", name: "Недавние", imageCount: ""),
+            Model(image: "Favorite", name: "Избранные", imageCount: ""),
+            Model(image: "Instagram", name: "Instagram", imageCount: ""),
+            Model(image: "Pin", name: "Pinterest", imageCount: ""),
+            Model(image: "Telegram", name: "Telegram", imageCount: ""),
+            Model(image: "SriLanka", name: "Шри Ланка", imageCount: ""),
+            Model(image: "Canaria", name: "Канария", imageCount: ""),
+            Model(image: "Viber", name: "Viber", imageCount: "")
         ],
         [
-            Model(image: "People", name: "Люди", imageCount: "4", chevron: nil),
-            Model(image: "Maps", name: "Места", imageCount: "568", chevron: nil)
+            Model(image: "People", name: "Люди", imageCount: "4"),
+            Model(image: "Maps", name: "Места", imageCount: "568")
         ],
         [
-            Model(image: "video", name: "Видео", imageCount: "163", chevron: "chevron.right"),
-            Model(image: "person.crop.rectangle", name: "Селфи", imageCount: "62", chevron: "chevron.right"),
-            Model(image: "livephoto", name: "Фото Live Photos", imageCount: "53", chevron: "chevron.right"),
-            Model(image: "cube", name: "Портреты", imageCount: "58", chevron: "chevron.right"),
-            Model(image: "pano", name: "Панорамы", imageCount: "1", chevron: "chevron.right"),
-            Model(image: "camera.viewfinder", name: "Снимки Экрана", imageCount: "48", chevron: "chevron.right"),
-            Model(image: "record.circle", name: "Записи экрана", imageCount: "4", chevron: "chevron.right"),
-            Model(image: "square.stack.3d.forward.dottedline", name: "Анимированные", imageCount: "2", chevron: "chevron.right")
+            Model(image: "video", name: "Видео", imageCount: "163"),
+            Model(image: "person.crop.rectangle", name: "Селфи", imageCount: "62"),
+            Model(image: "livephoto", name: "Фото Live Photos", imageCount: "53"),
+            Model(image: "cube", name: "Портреты", imageCount: "58"),
+            Model(image: "pano", name: "Панорамы", imageCount: "1"),
+            Model(image: "camera.viewfinder", name: "Снимки Экрана", imageCount: "48"),
+            Model(image: "record.circle", name: "Записи экрана", imageCount: "4"),
+            Model(image: "square.stack.3d.forward.dottedline", name: "Анимированные", imageCount: "2")
         ],
         [
-            Model(image: "square.and.arrow.down", name: "Импортированные", imageCount: "66", chevron: "chevron.right"),
-            Model(image: "rectangle.on.rectangle", name: "Дубликаты", imageCount: "2", chevron: "chevron.right"),
-            Model(image: "eye.slash", name: "Скрытые", imageCount: "lock.fill", chevron: "chevron.right"),
-            Model(image: "trash", name: "Недавно удаленные", imageCount: "lock.fill", chevron: "chevron.right")
+            Model(image: "square.and.arrow.down", name: "Импортированные", imageCount: "66"),
+            Model(image: "rectangle.on.rectangle", name: "Дубликаты", imageCount: "2"),
+            Model(image: "eye.slash", name: "Скрытые", imageCount: "lock.fill"),
+            Model(image: "trash", name: "Недавно удаленные", imageCount: "lock.fill")
         ]
     ]
 }
