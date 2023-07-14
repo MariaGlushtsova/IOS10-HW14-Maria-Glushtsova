@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SnapKit
 
 final class AlbumCell: UICollectionViewCell {
     
@@ -15,8 +14,8 @@ final class AlbumCell: UICollectionViewCell {
     //MARK: - Constants
     
     enum Metric {
-        static let indent: CGFloat = 5
-        static let photoRadius: CGFloat = 10
+        static let indent: CGFloat = 3
+        static let photoRadius: CGFloat = 5
     }
     
     //MARK: - Properties
@@ -27,21 +26,24 @@ final class AlbumCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
         imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
     lazy var nameAlbumLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.font = .systemFont(ofSize: 17)
+        label.font = .systemFont(ofSize: 15)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     lazy var numberOfPhotosLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.font = .systemFont(ofSize: 17)
+        label.font = .systemFont(ofSize: 15)
         label.textColor = .systemGray
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -49,36 +51,32 @@ final class AlbumCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
+        setupHierarchy()
+        setupLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError()
     }
-}
-
-extension AlbumCell {
     
-    func configure() {
-        contentView.addSubviews([
-            photoImageView,
-            nameAlbumLabel,
-            numberOfPhotosLabel
+    // MARK: - Setup
+    
+    private func setupHierarchy() {
+        contentView.addSubview(photoImageView)
+        contentView.addSubview(nameAlbumLabel)
+        contentView.addSubview(numberOfPhotosLabel)
+    }
+    
+    private func setupLayout() {
+        NSLayoutConstraint.activate([
+            photoImageView.topAnchor.constraint(equalTo: self.topAnchor),
+            photoImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            photoImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            photoImageView.heightAnchor.constraint(equalTo: photoImageView.widthAnchor),
+            
+            nameAlbumLabel.topAnchor.constraint(equalTo: photoImageView.bottomAnchor, constant: Metric.indent),
+            
+            numberOfPhotosLabel.topAnchor.constraint(equalTo: nameAlbumLabel.bottomAnchor, constant: Metric.indent)
         ])
-        
-        photoImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.height.equalTo(photoImageView.snp.width)
-        }
-
-        nameAlbumLabel.snp.makeConstraints { make in
-            make.top.equalTo(photoImageView.snp.bottom).offset(Metric.indent)
-        }
-
-        numberOfPhotosLabel.snp.makeConstraints { make in
-            make.top.equalTo(numberOfPhotosLabel.snp.bottom).offset(Metric.indent)
-        }
     }
 }
