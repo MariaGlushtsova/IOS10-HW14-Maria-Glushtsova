@@ -128,4 +128,14 @@ final class TableCell: UICollectionViewCell {
             lockImageView.trailingAnchor.constraint(equalTo: chevronButton.leadingAnchor, constant: -Metric.indent)
         ])
     }
+    
+    // MARK: - Reuse
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        iconView.image = nil
+        nameLabel.text = nil
+        numberOfPhotosLabel.text = nil
+        lockImageView.image = nil
+    }
 }

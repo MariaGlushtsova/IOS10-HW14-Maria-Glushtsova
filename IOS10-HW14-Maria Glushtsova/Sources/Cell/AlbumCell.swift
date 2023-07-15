@@ -79,4 +79,13 @@ final class AlbumCell: UICollectionViewCell {
             numberOfPhotosLabel.topAnchor.constraint(equalTo: nameAlbumLabel.bottomAnchor, constant: Metric.indent)
         ])
     }
+    
+    // MARK: - Reuse
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        photoImageView.image = nil
+        nameAlbumLabel.text = nil
+        numberOfPhotosLabel.text = nil
+    }
 }

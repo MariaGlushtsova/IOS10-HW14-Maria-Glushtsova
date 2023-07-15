@@ -24,7 +24,9 @@ class ViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.register(AlbumCell.self, forCellWithReuseIdentifier: AlbumCell.identifier)
         collectionView.register(TableCell.self, forCellWithReuseIdentifier: TableCell.identifier)
+        collectionView.register(CellHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CellHeader.identifier)
         collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.backgroundColor = .white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
@@ -39,6 +41,7 @@ class ViewController: UIViewController {
     
     private func setupView() {
         title = "Альбомы"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
         navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = .white
     }
@@ -55,9 +58,13 @@ class ViewController: UIViewController {
             collection.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
+    
+    @objc func addTapped() {
+
+    }
 }
 
-extension ViewController: UICollectionViewDataSource {
+extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         4
@@ -93,10 +100,54 @@ extension ViewController: UICollectionViewDataSource {
             let item = collectionView.dequeueReusableCell(withReuseIdentifier: TableCell.identifier, for: indexPath) as? TableCell
             item?.iconView.image = UIImage(systemName: data.image)
             item?.nameLabel.text = data.name
+            if data.name == "Анимированные" || data.name == "Недавно удаленные" {
+                item?.lineSeparators.backgroundColor = .white
+            }
             item?.numberOfPhotosLabel.text = data.imageCount
             item?.lockImageView.image = UIImage(systemName: data.lockImage ?? "")
             return item ?? UICollectionViewCell()
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        switch indexPath.section {
+        case 0:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CellHeader.identifier, for: indexPath) as! CellHeader
+            header.configure()
+            header.title.text = "Мои альбомы"
+            header.lineSeparator.frame = CGRect(x: 0, y: 0, width: 390, height: 1)
+            return header
+        case 1:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CellHeader.identifier, for: indexPath) as! CellHeader
+            header.configure()
+            header.title.text = "Люди и места"
+            header.lineSeparator.frame = CGRect(x: 0, y: 0, width: 390, height: 1)
+            return header
+        case 2:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CellHeader.identifier, for: indexPath) as! CellHeader
+            header.configure()
+            header.title.text = "Типы медиафайлов"
+            header.lineSeparator.frame = CGRect(x: 0, y: 0, width: 390, height: 1)
+            return header
+        case 3:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CellHeader.identifier, for: indexPath) as! CellHeader
+            header.configure()
+            header.title.text = "Другое"
+            header.lineSeparator.frame = CGRect(x: 0, y: 0, width: 390, height: 1)
+            return header
+        default:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CellHeader
+            return header
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let viewController = MediaTabBarViewController()
+        collectionView.deselectItem(at: indexPath, animated: true)
+        navigationController?.pushViewController(viewController, animated: true)
+        let data = model[indexPath.section][indexPath.item]
+        data.handler()
     }
 }
 
@@ -173,15 +224,14 @@ extension ViewController {
         
         section.contentInsets.leading = Metric.layoutIndent
         
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(45))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
+        let layoutSectionHeaderSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.93),
+            heightDimension: .estimated(40))
+        let layoutSectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: layoutSectionHeaderSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top)
-        header.zIndex = Int.max
-        section.boundarySupplementaryItems = [header]
+        section.boundarySupplementaryItems = [layoutSectionHeader]
         
         return section
     }
@@ -223,15 +273,14 @@ extension ViewController {
         
         section.contentInsets.leading = Metric.layoutIndent
         
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(45))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
+        let layoutSectionHeaderSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.93),
+            heightDimension: .estimated(40))
+        let layoutSectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: layoutSectionHeaderSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top)
-        header.zIndex = Int.max
-        section.boundarySupplementaryItems = [header]
+        section.boundarySupplementaryItems = [layoutSectionHeader]
         
         return section
     }
@@ -260,13 +309,16 @@ extension ViewController {
         let section = NSCollectionLayoutSection(group: group)
 
         section.contentInsets.leading = Metric.layoutIndent
+        section.contentInsets.bottom = Metric.topIndentVerticalSection
 
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: itemSize,
+        let layoutSectionHeaderSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.93),
+            heightDimension: .estimated(40))
+        let layoutSectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: layoutSectionHeaderSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top)
-        header.zIndex = Int.max
-        section.boundarySupplementaryItems = [header]
+        section.boundarySupplementaryItems = [layoutSectionHeader]
         
         return section
     }
@@ -296,12 +348,14 @@ extension ViewController {
 
         section.contentInsets.leading = Metric.layoutIndent
 
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: itemSize,
+        let layoutSectionHeaderSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.93),
+            heightDimension: .estimated(40))
+        let layoutSectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: layoutSectionHeaderSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top)
-        header.zIndex = Int.max
-        section.boundarySupplementaryItems = [header]
+        section.boundarySupplementaryItems = [layoutSectionHeader]
         
         return section
     }
